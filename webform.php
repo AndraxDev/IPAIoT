@@ -7,12 +7,12 @@ $age = $_POST['age'];
 $country = $_POST['country'];
 $bio = $_POST['bio'];
 
-$database = file_get_contents("database.json");
+$database = file_get_contents("database.json.txt");
 
 // Create empty JSON array if database is empty
 if ($database == "") {
-    file_put_contents("database.json", "[]");
-    $database = file_get_contents("database.json");
+    file_put_contents("database.json.txt", "[]");
+    $database = file_get_contents("database.json.txt");
 }
 
 $database_decoded = json_decode($database);
@@ -68,7 +68,7 @@ if ($email != "" && $surname != "" && $email != "" && $age != "" && $country != 
     $person = new Person($name, $surname, $email, $age, $country, $bio);
     array_push($database_decoded, $person);
     $new_database = json_encode($database_decoded);
-    file_put_contents("database.json", $new_database);
+    file_put_contents("database.json.txt", $new_database);
 
     // Success page
 $success = <<<EOL
@@ -93,7 +93,7 @@ EOL;
 
 // Debug that prints all database
 function debug() {
-    echo(file_get_contents("database.json"));
+    echo(file_get_contents("database.json.txt"));
 }
 
 ?>
