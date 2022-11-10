@@ -1,11 +1,11 @@
 <?php
 
-$name = $_POST['name']
-$surname = $_POST['surname']
-$email = $_POST['email']
-$age = $_POST['age']
-$country = $_POST['country']
-$bio = $_POST['bio']
+$name = $_POST['name'];
+$surname = $_POST['surname'];
+$email = $_POST['email'];
+$age = $_POST['age'];
+$country = $_POST['country'];
+$bio = $_POST['bio'];
 
 $database = file_get_contents("database.json");
 
