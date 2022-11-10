@@ -11,7 +11,8 @@ $database = file_get_contents("database.json");
 
 // Create empty JSON array if database is empty
 if ($database == "") {
-    $database == "[]";
+    file_put_contents("database.json", "[]");
+    $database = file_get_contents("database.json");
 }
 
 $database_decoded = json_decode($database);
