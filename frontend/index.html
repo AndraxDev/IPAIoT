@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IoT control panel</title>
+        <style>
+            html, body {
+                padding: 0;
+                margin: 0;
+                background-color: #000;
+                font-family: arial, sans-serif;
+                user-select: none;
+            }
+            
+            p {
+                color: #fff;
+            }
+            
+            .color {
+                width: 72px;
+                height: 48px;
+                border-radius: 16px;
+                border: 2px solid #000;
+                margin: 0 8px;
+            }
+            
+            .selected-left {
+                color: #000;
+                border-top-left-radius: 16px;
+                border-bottom-left-radius: 16px;
+                border: 2px solid #fff;
+                background-color: #fff;
+                cursor: pointer;
+                outline: none;
+                height: 48px;
+                width: 72px;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .selected-right {
+                color: #000;
+                border-top-right-radius: 16px;
+                border-bottom-right-radius: 16px;
+                border: 2px solid #fff;
+                background-color: #fff;
+                cursor: pointer;
+                outline: none;
+                height: 48px;
+                width: 72px;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .unselected-left {
+                color: #fff;
+                border-top-left-radius: 16px;
+                border-bottom-left-radius: 16px;
+                border-left: none;
+                border: 2px solid #fff;
+                background-color: #000;
+                cursor: pointer;
+                outline: none;
+                height: 48px;
+                width: 72px;
+                padding: 0;
+                margin: 0;
+                transition: 0.3s;
+            }
+            
+            .unselected-left:hover {
+                background-color: #333;
+                transition: 0.3s;
+            }
+            
+            .unselected-right:hover {
+                background-color: #333;
+                transition: 0.3s;
+            }
+            
+            .unselected-right {
+                color: #fff;
+                border-top-right-radius: 16px;
+                border-bottom-right-radius: 16px;
+                border: 2px solid #fff;
+                background-color: #000;
+                cursor: pointer;
+                outline: none;
+                height: 48px;
+                width: 72px;
+                padding: 0;
+                margin: 0;
+                transition: 0.3s;
+            }
+            
+            .switch {
+                display: flex;
+                flex-direction: row;
+                margin: 0 auto;
+            }
+            
+            .control {
+                width: 250px;
+                height: 120px;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                padding: 16px;
+                margin: 8px;
+            }
+            
+            .control-name {
+                font-size: 16;
+                text-align: center;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .color-form {
+                display: flex;
+                flex-direction: row;
+                margin-right: 48px;
+            }
+            
+            .button {
+                color: #000;
+                border-radius: 16px;
+                border: 2px solid #fff;
+                background-color: #fff;
+                cursor: pointer;
+                outline: none;
+                height: 48px;
+                width: 72px;
+                padding: 0;
+                margin: 0 8px;
+            }
+            
+            .input {
+                width: 144px;
+                height: 48px;
+                font-size: 18px;
+                color: #fff;
+                border-radius: 16px;
+                border: 2px solid #444;
+                background-color: #000;
+                outline: none;
+                padding: 0 16px;
+                margin: 0 8px;
+            }
+            
+            .input-invalid {
+                width: 144px;
+                height: 48px;
+                font-size: 18px;
+                color: #ff0000;
+                border-radius: 16px;
+                border: 2px solid #ff0000;
+                background-color: #000;
+                outline: none;
+                padding: 0 16px;
+                margin: 0 8px;
+            }
+            
+            .other-controls {
+                display: flex;
+                flex-direction: row;
+            }
+            
+            .placeholder {
+                width: 70px;
+                height: 48px;
+            }
+            
+            .title {
+                padding: 0;
+                margin: 48px 76px;
+                color: #fff;
+            }
+            
+            .data {
+                width: 250px;
+                font-size: 18px;
+                color: #fff;
+                border-radius: 16px;
+                border: 2px solid #222;
+                background-color: #000;
+                outline: none;
+                padding: 16px 16px;
+                margin: 0 8px;
+                transition: 0.3s;
+            }
+            
+            .data:hover {
+                transition: 0.3s;
+                border: 2px solid #777;
+            }
+            
+            .sensors {
+                display: flex;
+                flex-direction: row;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <!--<p id = "enabled">Loading device data...</p>
+            <p id = "rollets"></p>
+            <p id = "light"></p>
+            <p id = "temp"></p>
+            <p id = "ml"></p>
+            <p id = "mt"></p>-->
+            <h1 class = "title">IoT control panel</h1>
+            <div class = "control">
+                <p class = "control-name">Main switch</p>
+                <br>
+                <div class = "switch">
+                    <button id = "enable" class = "selected-left" onclick="enable()">ON</button>
+                    <button id = "disable" class = "unselected-right" onclick="disable()">OFF</button>
+                </div>
+            </div>
+            <br>
+            <div class = "color-form">
+                <div class = "placeholder"></div>
+                <form id = "color_set">
+                    <input class = "input" name = "red" id = "red" required>
+                    <input class = "input" name = "green" id = "green" required>
+                    <input class = "input" name = "blue" id = "blue" required>
+                    <input class = "button" type = "submit" id = "set" name = "set" value = "Set">
+                </form>
+                <div class = "color" id = "color"></div>
+            </div>
+            <br>
+            <div class = "other-controls">
+                <div class = "control">
+                    <p class = "control-name">Rollets</p>
+                    <br>
+                    <div class = "switch">
+                        <button id = "openRollets" class = "selected-left" onclick="openRollets()">OPENED</button>
+                        <button id = "closeRollets" class = "unselected-right" onclick="closeRollets()">CLOSED</button>
+                    </div>
+                </div>
+                <div class = "control">
+                    <p class = "control-name">Manage by light sensor</p>
+                    <br>
+                    <div class = "switch">
+                        <button id = "manageByLight" class = "selected-left" onclick="manageByLight()">YES</button>
+                        <button id = "unmanageByLight" class = "unselected-right" onclick="unmanageByLight()">NO</button>
+                    </div>
+                </div>
+                <div class = "control">
+                    <p class = "control-name">Manage by temperature sensor</p>
+                    <br>
+                    <div class = "switch">
+                        <button id = "manageByTemp" class = "selected-left" onclick="manageByTemp()">YES</button>
+                        <button id = "unmanageByTemp" class = "unselected-right" onclick="unmanageByTemp()">NO</button>
+                    </div>
+                </div>
+            </div>
+            <h2 class = "title">Sensors data</h2>
+            <div class = "sensors">
+                <div class = "placeholder"></div>
+                <p class = "data" id = "light">Ambient light: loading device data...</p>
+                <p class = "data" id = "temp">Temperature: loading device data...</p>
+            </div>
+        </div>
+        <script>
+            function setControl(url) {
+                var ajax = new XMLHttpRequest(); 
+	            ajax.addEventListener("load", function () {
+	                if (this.status == 200) {
+                	    console.log(this.responseText);
+	                } else {
+	                    console.log("Error");
+	                }
+	            }); 
+	            ajax.open("GET", url, true); 
+	            ajax.send();
+            }
+            
+            function switchToLeft(elem1, elem2) {
+                document.getElementById(elem1).classList.add('selected-left');
+                if ( document.getElementById(elem1).classList.contains('unselected-left')) {
+                    document.getElementById(elem1).classList.remove('unselected-left');
+                }
+                
+                if ( document.getElementById(elem1).classList.contains('unselected-right')) {
+                    document.getElementById(elem1).classList.remove('unselected-right');
+                }
+                
+                if ( document.getElementById(elem1).classList.contains('selected-right')) {
+                    document.getElementById(elem1).classList.remove('selected-right');
+                }
+                
+                document.getElementById(elem2).classList.add('unselected-right');
+                if ( document.getElementById(elem2).classList.contains('selected-right')) {
+                    document.getElementById(elem2).classList.remove('selected-right');
+                }
+                
+                if ( document.getElementById(elem2).classList.contains('unselected-left')) {
+                    document.getElementById(elem2).classList.remove('unselected-left');
+                }
+                
+                if ( document.getElementById(elem2).classList.contains('selected-left')) {
+                    document.getElementById(elem2).classList.remove('selected-left');
+                }
+            }
+            
+            function switchToRight(elem1, elem2) {
+                document.getElementById(elem2).classList.add('selected-right');
+                if ( document.getElementById(elem2).classList.contains('unselected-right')) {
+                    document.getElementById(elem2).classList.remove('unselected-right');
+                }
+                
+                if ( document.getElementById(elem2).classList.contains('unselected-left')) {
+                    document.getElementById(elem2).classList.remove('unselected-left');
+                }
+                
+                if ( document.getElementById(elem2).classList.contains('selected-left')) {
+                    document.getElementById(elem2).classList.remove('selected-left');
+                }
+                
+                document.getElementById(elem1).classList.add('unselected-left');
+                if ( document.getElementById(elem1).classList.contains('selected-left')) {
+                    document.getElementById(elem1).classList.remove('selected-left');
+                }
+                
+                if ( document.getElementById(elem1).classList.contains('unselected-right')) {
+                    document.getElementById(elem1).classList.remove('unselected-right');
+                }
+                
+                if ( document.getElementById(elem1).classList.contains('selected-right')) {
+                    document.getElementById(elem1).classList.remove('selected-right');
+                }
+            }
+        
+            function enable() {
+                switchToLeft("enable", "disable");
+                var url = "https://proxy.teslasoft.org/set_control.php?enabled=1";
+                setControl(url);
+            }
+            
+            function disable() {
+                switchToRight("enable", "disable");
+                var url = "https://proxy.teslasoft.org/set_control.php?enabled=0";
+                setControl(url);
+            }
+            
+            function openRollets() {
+                switchToLeft("openRollets", "closeRollets");
+                var url = "https://proxy.teslasoft.org/set_control.php?rollets=1";
+                setControl(url);
+            }
+            
+            function closeRollets() {
+                switchToRight("openRollets", "closeRollets");
+                var url = "https://proxy.teslasoft.org/set_control.php?rollets=0";
+                setControl(url);
+            }
+            
+            function manageByLight() {
+                switchToLeft("manageByLight", "unmanageByLight");
+                var url = "https://proxy.teslasoft.org/set_control.php?ml=1";
+                setControl(url);
+            }
+            
+            function unmanageByLight() {
+                switchToRight("manageByLight", "unmanageByLight");
+                var url = "https://proxy.teslasoft.org/set_control.php?ml=0";
+                setControl(url);
+            }
+            
+            function manageByTemp() {
+                switchToLeft("manageByTemp", "unmanageByTemp");
+                var url = "https://proxy.teslasoft.org/set_control.php?mt=1";
+                setControl(url);
+            }
+            
+            function unmanageByTemp() {
+                switchToRight("manageByTemp", "unmanageByTemp");
+                var url = "https://proxy.teslasoft.org/set_control.php?mt=0";
+                setControl(url);
+            }
+            
+            document.getElementById("set").addEventListener("click", function(event){
+                event.preventDefault();
+                
+                var r = document.getElementById("red").value;
+                var g = document.getElementById("green").value;
+                var b = document.getElementById("blue").value;
+                
+                if (document.getElementById("red").value === "") {
+                    document.getElementById("red").classList.add('input-invalid');
+                } else {
+                    if ( document.getElementById("red").classList.contains('input-invalid')) {
+                        document.getElementById("red").classList.remove('input-invalid');
+                    }
+                }
+                
+                if (document.getElementById("green").value === "") {
+                    document.getElementById("green").classList.add('input-invalid');
+                } else {
+                    if ( document.getElementById("green").classList.contains('input-invalid')) {
+                        document.getElementById("green").classList.remove('input-invalid');
+                    }
+                }
+                
+                if (document.getElementById("blue").value === "") {
+                    document.getElementById("blue").classList.add('input-invalid');
+                } else {
+                    if ( document.getElementById("blue").classList.contains('input-invalid')) {
+                        document.getElementById("blue").classList.remove('input-invalid');
+                    }
+                }
+                
+                if (document.getElementById("red").value !== "" && document.getElementById("green").value !== "" && document.getElementById("blue").value !== "") {
+                    var url = "https://proxy.teslasoft.org/set.php?key=12345&r=" + r + "&g=" + g + "&b=" + b;
+                    console.log(url);
+                    setControl(url);
+                }
+            });
+            
+            var _device_data = "https://proxy.teslasoft.org/get.php";
+            var _ajax = new XMLHttpRequest(); 
+            _ajax.addEventListener("load", function () {
+                if (this.status == 200) {
+            	    var response = JSON.parse(this.responseText);
+            	    
+            	    if (response.enabled === '1') {
+            	        switchToLeft("enable", "disable");
+            	    } else {
+            	        switchToRight("enable", "disable");
+            	    }
+            	    
+            	    if (response.rollets === '1') {
+            	        switchToLeft("openRollets", "closeRollets");
+            	    } else {
+            	        switchToRight("openRollets", "closeRollets");
+            	    }
+            	    
+            	    if (response.ml === '1') {
+            	        switchToLeft("manageByLight", "unmanageByLight");
+            	    } else {
+            	        switchToRight("manageByLight", "unmanageByLight");
+            	    }
+            	    
+            	    if (response.mt === '1') {
+            	        switchToLeft("manageByTemp", "unmanageByTemp");
+            	    } else {
+            	        switchToRight("manageByTemp", "unmanageByTemp");
+            	    }
+            	    
+            	    document.getElementById("red").value = response.red
+            	    document.getElementById("green").value = response.green
+            	    document.getElementById("blue").value = response.blue
+                }
+            }); 
+            _ajax.open("GET", _device_data, true); 
+            _ajax.send();
+        
+            setInterval(function() {
+                var device_data = "https://proxy.teslasoft.org/get.php";
+                var sensors_data = "https://proxy.teslasoft.org/get_sensors.php";
+                var ajax = new XMLHttpRequest(); 
+	            ajax.addEventListener("load", function () {
+	                if (this.status == 200) {
+                	    var response = JSON.parse(this.responseText);
+                	    
+                	    document.getElementById("color").style.backgroundColor = 'rgb(' + response.red + ',' + response.green + ',' + response.blue + ')';
+                	    
+                	    if ((response.mt === '1' || response.ml === '1') || (response.mt === '1' && response.ml === '1')) {
+                	        document.getElementById("red").value = response.red
+                    	    document.getElementById("green").value = response.green
+                    	    document.getElementById("blue").value = response.blue
+                	    }
+	                }
+	            }); 
+	            ajax.open("GET", device_data, true); 
+	            ajax.send();
+	            
+	            var ajax2 = new XMLHttpRequest(); 
+	            ajax2.addEventListener("load", function () {
+	                if (this.status == 200) {
+                	    var response = JSON.parse(this.responseText);
+                	    
+                	    document.getElementById("light").innerHTML = "Light: " + response.light + " lx"
+                	    document.getElementById("temp").innerHTML = "Temperature: " + response.temperature + " C"
+	                }
+	            }); 
+	            ajax2.open("GET", sensors_data, true); 
+	            ajax2.send();
+            }, 500);
+        </script>
+    </body>
+</html>
